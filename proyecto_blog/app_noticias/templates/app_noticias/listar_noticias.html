@@ -1,0 +1,11 @@
+
+<h1>{{ titulo_pagina }}</h1>
+
+
+{% for noticia in noticias %}
+    {{ noticia.titulo }} <br>
+    {{ noticia.autor }} <br>
+    {{ noticia.categoria }} <br>
+    {{ noticia.contenido }}
+    <hr>
+{% endfor %}
