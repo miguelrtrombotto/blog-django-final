@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+    {% block contenido %}
+
+        <img src="{{ noticias.imagen.url }}" alt="" width="200px">
+        <h1> {{ noticias.titulo }} </h1> <br>
+        <p> {{ noticias.contenido }} </p>
+
+    {% endblock contenido %}

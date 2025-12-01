@@ -1,11 +1,17 @@
 
-<h1>{{ titulo_pagina }}</h1>
+{% extends "base.html" %}
+
+    {% block contenido %}
+    
+        <h1>{{ titulo_pagina }}</h1>
 
 
-{% for noticia in noticias %}
-    {{ noticia.titulo }} <br>
-    {{ noticia.autor }} <br>
-    {{ noticia.categoria }} <br>
-    {{ noticia.contenido }}
-    <hr>
-{% endfor %}
+        {% for noticia in noticias %}
+            titulo: {{ noticia.titulo }} <br>
+            autor:{{ noticia.autor }} <br>
+            categoria: {{ noticia.categoria }} <br>
+            {{ noticia.contenido }}
+            <hr>
+        {% endfor %}
+
+    {% endblock contenido %}
