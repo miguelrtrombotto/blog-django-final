@@ -7,6 +7,15 @@
 </head>
 <nav>
 <h1> Aqui barra de navegacion </h1> <hr>
+        {% if user.is_authenticated %}
+        <p>Bienvenido</p> <h4>{{user.username}}</h4>
+        <a href="{% url 'logout' %}"> Cerrar sesion</a>
+
+        {% else %}
+        <a href="{% url 'registro' %}">Registrarse</a>
+        <a href="{% url 'login' %}">Iniciar sesion</a>
+
+        {% endif %}
 </nav>
 
 <body>

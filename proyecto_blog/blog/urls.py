@@ -22,6 +22,12 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     # agregamos las urls de app_noticias a la app principal
-    path("", include("app_noticias.urls"))
+    path("", include("app_noticias.urls")),
+    # urls de la app_usuarios
+    path("usuarios/", include("app_usuarios.urls"))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+
+# localhost:8000/usuarios/registro/
