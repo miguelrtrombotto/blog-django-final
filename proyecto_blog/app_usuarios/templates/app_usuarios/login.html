@@ -1,15 +1,35 @@
 {% extends "base.html" %}
 
+{% load crispy_forms_tags %}
 
     {% block contenido %}
-    <h1> Iniciar Sesion </h1>
 
-        <form method="POST">
-            {% csrf_token %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-6">
+            <div class="card-shadow">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Iniciar Sesion</h3>
+                         <form method="POST">
+                            {% csrf_token %}
 
-            {{ form.as_p }}
+                            {{ form|crispy }}
 
-            <button type="submit"> Iniciar Sesion </button>
-        </form>
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary"> Iniciar Sesion </button>
+                            </div>
+                        </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+       
 
     {% endblock contenido %}

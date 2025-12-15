@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import Noticias, Categorias
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -9,6 +11,7 @@ from django.contrib.auth.models import User
 # Objeto.delete() === DELETE FROM noticias WHERE id=4;
 
 # funciones (VBF)
+# @login_required
 def listar_noticias(request):
     noticias = Noticias.objects.all()
 
@@ -22,11 +25,15 @@ def listar_noticias(request):
 # clases (VBC) genericas
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+
 class NoticiasListView(ListView):
     model = Noticias
     template_name = "app_noticias/listar_noticias.html"
     context_object_name = "noticias"
 
+
+@method_decorator(login_required, name='dispatch')
 class NoticiaDetailView(DetailView):
     model = Noticias
     template_name = "app_noticias/detalle_noticia.html"

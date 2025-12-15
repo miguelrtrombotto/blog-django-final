@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+LOGIN_REDIRECT_URL = "listar_noticias"
+LOGOUT_REDIRECT_URL = "listar_noticias"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,8 +31,14 @@ INSTALLED_APPS = [
     # mis apps
     'app_noticias',
     'app_usuarios',
-    
+
+    # crispy
+    "crispy_forms",
+    "crispy_bootstrap5"
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

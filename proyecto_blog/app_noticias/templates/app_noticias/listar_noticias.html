@@ -1,17 +1,31 @@
-
 {% extends "base.html" %}
 
     {% block contenido %}
-    
-        <h1>{{ titulo_pagina }}</h1>
+    <div class="container my-5">
+        <h1 class="mb-4 boder-bottom pb">{{ titulo_pagina }}</h1>
+
+        <div class="row">
+            {% for noticia in noticias %}
+
+            <div class="card-body">
+                <span class="badge bg-primary mb-2">{{ noticia.categoria }}</span> 
+                
+                <h5 class="card-title fw-bold" >{{ noticia.titulo }}</h5>
+
+                <h6 class="card-subtitle mb-3 text-muted">{{ noticia.autor }} </h6>
+                
+                <p class="card-text">{{ noticia.contenido|truncatewords:5}}</p>
+
+                <a href="{% url 'detalle_noticia' noticia.pk %}">Leer más</a>
+                
+                <hr>
+
+            </div>
 
 
-        {% for noticia in noticias %}
-            titulo: {{ noticia.titulo }} <br>
-            autor:{{ noticia.autor }} <br>
-            categoria: {{ noticia.categoria }} <br>
-            {{ noticia.contenido }}
-            <hr>
-        {% endfor %}
 
+            {% endfor %}
+        </div>
+
+    </div>
     {% endblock contenido %}
