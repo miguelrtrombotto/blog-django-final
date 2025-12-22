@@ -1,17 +1,19 @@
 from django.contrib import admin
-from .models import Noticias, Categorias
+from .models import Noticias, Categorias, Comentario
 
-# Register your models here.
+# Registro básico de Categorías
+admin.site.register(Categorias)
 
+# Configuración personalizada para Noticias
 @admin.register(Noticias)
 class NoticiasAdmin(admin.ModelAdmin):
-    # agrega los campos que pasemos en la tupla
-    list_display = ("titulo", "categoria", "fecha")
-    #  filtra las noticias por categoria
-    list_filter = ("categoria",)
+    list_display = ('titulo', 'autor', 'categoria', 'fecha')
+    list_filter = ('categoria', 'autor', 'fecha')
+    search_fields = ('titulo', 'contenido')
 
-    # cuadro de busqueda por campo que pasamos en la tupla
-    search_fields = ("categoria",)
-
-    
-admin.site.register(Categorias)
+# Configuración para Comentarios
+@admin.register(Comentario)
+class ComentarioAdmin(admin.ModelAdmin):
+    list_display = ('autor', 'noticia', 'fecha')
+    list_filter = ('fecha', 'autor')
+    search_fields = ('cuerpo',)
