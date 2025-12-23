@@ -1,11 +1,69 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block contenido %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Bloque de la Noticia -->
+            <article class="mb-5">
+                
+                {# VALIDACIÓN: Solo intenta mostrar la imagen si existe #}
+                {% if noticias.imagen %}
+                    <img src="{{ noticias.imagen.url }}" class="img-fluid rounded shadow mb-4" alt="{{ noticias.titulo }}" style="width: 100%; max-height: 400px; object-fit: cover;">
+                {% else %}
+                    <div class="alert alert-secondary text-center py-5 mb-4">
+                        <p class="mb-0 text-muted">Esta noticia no tiene imagen cargada.</p>
+                    </div>
+                {% endif %}
+                
+                <h1 class="fw-bold mb-3">{{ noticias.titulo }}</h1>
+                
+                <div class="text-muted mb-4 fst-italic border-bottom pb-2">
+                    Escrito por <strong>{{ noticias.autor.username }}</strong> el {{ noticias.fecha|date:"d/m/Y" }} 
+                    en la categoría <span class="badge bg-secondary">{{ noticias.categoria.nombre|default:"General" }}</span>
+                </div>
 
-    {% block contenido %}
+                <div class="lead" style="white-space: pre-line;">
+                    {{ noticias.contenido }}
+                </div>
+            </article>
 
-        <img src="{{ noticias.imagen.url }}" alt="" width="200px">
-        <h1> {{ noticias.titulo }} </h1> <br>
-        <p> {{ noticias.contenido }} </p>
+            <!-- Sección de Comentarios -->
+            <section class="mt-5 border-top pt-4">
+                <h3 class="mb-4">Comentarios ({{ noticias.comentarios.count }})</h3>
 
-    {% endblock contenido %}
+                {% for comentario in noticias.comentarios.all %}
+                    <div class="card mb-3 shadow-sm border-0 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold text-primary mb-0">@{{ comentario.autor.username }}</h6>
+                                <small class="text-muted">{{ comentario.fecha|timesince }}</small>
+                            </div>
+                            <p class="card-text">{{ comentario.cuerpo }}</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted italic">No hay comentarios todavía.</p>
+                {% endfor %}
+
+                <!-- Formulario -->
+                <div class="mt-5 p-4 bg-white rounded shadow-sm border">
+                    <h5 class="mb-3">Deja un comentario</h5>
+                    {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'agregar_comentario' noticias.pk %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary mt-2">Publicar comentario</button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <p class="text-muted">Debes <a href="{% url 'login' %}">iniciar sesión</a> para comentar.</p>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

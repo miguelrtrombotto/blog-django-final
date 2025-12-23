@@ -1,31 +1,74 @@
 {% extends "base.html" %}
 
-    {% block contenido %}
-    <div class="container my-5">
-        <h1 class="mb-4 boder-bottom pb">{{ titulo_pagina }}</h1>
+{% block contenido %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">{{ titulo_pagina }}</h1>
 
-        <div class="row">
-            {% for noticia in noticias %}
+    <!-- Barra de Filtros y Búsqueda -->
+    <div class="card shadow-sm mb-5 bg-light">
+        <div class="card-body">
+            <form method="GET" action="{% url 'listar_noticias' %}" class="row g-3">
+                <!-- Buscador por texto -->
+                <div class="col-md-4">
+                    <input type="text" name="buscar" class="form-control" placeholder="Buscar por título o contenido..." value="{{ request.GET.buscar }}">
+                </div>
 
-            <div class="card-body">
-                <span class="badge bg-primary mb-2">{{ noticia.categoria }}</span> 
-                
-                <h5 class="card-title fw-bold" >{{ noticia.titulo }}</h5>
+                <!-- Filtro por Categoría -->
+                <div class="col-md-3">
+                    <select name="categoria" class="form-select">
+                        <option value="">Todas las categorías</option>
+                        {% for cat in categorias %}
+                            <option value="{{ cat.id }}" {% if request.GET.categoria == cat.id|stringformat:"i" %}selected{% endif %}>
+                                {{ cat.nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                <h6 class="card-subtitle mb-3 text-muted">{{ noticia.autor }} </h6>
-                
-                <p class="card-text">{{ noticia.contenido|truncatewords:5}}</p>
+                <!-- Orden -->
+                <div class="col-md-3">
+                    <select name="orden" class="form-select">
+                        <option value="desc" {% if request.GET.orden == 'desc' %}selected{% endif %}>Más nuevas primero</option>
+                        <option value="asc" {% if request.GET.orden == 'asc' %}selected{% endif %}>Más viejas primero</option>
+                    </select>
+                </div>
 
-                <a href="{% url 'detalle_noticia' noticia.pk %}">Leer más</a>
-                
-                <hr>
-
-            </div>
-
-
-
-            {% endfor %}
+                <!-- Botones -->
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                    <a href="{% url 'listar_noticias' %}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
         </div>
-
     </div>
-    {% endblock contenido %}
+
+    <!-- Listado de Noticias -->
+    <div class="row">
+        {% for n in noticias %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    {% if n.imagen %}
+                        <img src="{{ n.imagen.url }}" class="card-img-top" alt="..." style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span>Sin imagen</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ n.titulo }}</h5>
+                        <p class="card-text text-muted">{{ n.contenido|truncatechars:80 }}</p>
+                        <span class="badge bg-primary mb-2">{{ n.categoria.nombre }}</span>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 pb-3">
+                        <a href="{% url 'detalle_noticia' n.pk %}" class="btn btn-outline-primary btn-sm w-100">Leer noticia completa</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <h4 class="text-muted fst-italic">No hay noticias que coincidan con los filtros aplicados.</h4>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock contenido %}
